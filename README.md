@@ -6,11 +6,16 @@
 
 ## Problemática
 
-### Contexto
+### Marco Teórico
 
-El Perú destina anualmente miles de millones de soles a proyectos de inversión pública a través del **Sistema Nacional de Programación Multianual y Gestión de Inversiones (Invierte.pe)**. Estos proyectos abarcan infraestructura vial, salud, educación, saneamiento, energía y otros sectores críticos para el desarrollo del país.
+El desarrollo de este proyecto se fundamenta en los principios de **Business Intelligence (BI)** y el modelado de datos propuesto por la metodología de **Ralph Kimball (Lifecycle Toolkit)**. El objetivo primordial es transformar datos transaccionales gubernamentales de naturaleza heterogénea en activos de información estratégica para la toma de decisiones y el control ciudadano.
 
-Sin embargo, el análisis de los **468,428 proyectos registrados entre 2001 y 2024** revela patrones preocupantes que plantean interrogantes sobre la eficiencia, equidad y sostenibilidad del gasto público peruano.
+#### Conceptos Clave Aplicados
+* **OLAP vs. OLTP**: Los sistemas fuente de Invierte.pe operan bajo un esquema transaccional (OLTP), optimizado para el registro individual de proyectos. Este proyecto migra dicha información a un entorno analítico (OLAP), diseñado para consultas complejas, agregaciones históricas y análisis de tendencias multidimensionales.
+* **Proceso ETL (Extract, Transform, Load)**: Implementado mediante scripts de Python (etl/unir_inversiones.py), el proceso consolida 25 fuentes regionales independientes, estandariza tipos de datos, maneja valores nulos y limpia anomalías estructurales para garantizar la "versión única de la verdad".
+* **Modelado Dimensional (Star Schema)**: Se optó por una arquitectura en estrella debido a su alto rendimiento en consultas de agregación y su intuitiva navegación para los usuarios de negocio. El modelo separa claramente las métricas cuantitativas (hechos) de los atributos cualitativos (dimensiones).
+* **Métricas Aditivas y Semi-aditivas**: El modelo gestiona medidas sumables a través de todas las dimensiones (como el monto_viable) y ratios calculados que permiten evaluar desviaciones presupuestales de forma porcentual sin distorsionar la agregación.
+
 
 ### Hallazgos Principales
 
