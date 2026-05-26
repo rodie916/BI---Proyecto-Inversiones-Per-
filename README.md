@@ -17,15 +17,17 @@ El desarrollo de este proyecto se fundamenta en los principios de **Business Int
 * **Métricas Aditivas y Semi-aditivas**: El modelo gestiona medidas sumables a través de todas las dimensiones (como el monto_viable) y ratios calculados que permiten evaluar desviaciones presupuestales de forma porcentual sin distorsionar la agregación.
 
 
-### Hallazgos Principales
+### Descripción de la Empresa (Entidad) y Problemática
 
-#### 1. Concentración geográfica: Lima vs. el resto del país
+El análisis no se centra en una corporación privada, sino en el **Estado Peruano**, específicamente en el **Sistema Nacional de Programación Multianual y Gestión de Inversiones (Invierte.pe)**, administrado por el *Ministerio de Economía y Finanzas (MEF)*. Esta entidad orienta los recursos públicos destinados a la inversión para el cierre de brechas de infraestructura y acceso a servicios públicos esenciales.
 
-> *"El 22.2% del monto total de inversión viable se concentra en un solo departamento: Lima."*
+#### La Problemática Encontrada
 
-Con un monto viable acumulado de **S/. 967 mil millones**, Lima lidera la inversión pública a nivel nacional, mientras que los cuatro departamentos de la selva peruana (Loreto, Ucayali, Amazonas y Madre de Dios) — que juntos representan más del **55% del territorio nacional** — apenas concentran el **8.2% del monto total (S/. 357 mil millones)**.
+A pesar de contar con un flujo continuo de miles de millones de soles anuales, la gestión de la inversión pública sufre de ineficiencias estructurales que se evidencian al analizar los **468,428 proyectos registrados entre 2001 y 2024:**
 
-Esta disparidad es especialmente preocupante cuando se considera que los departamentos amazónicos presentan los mayores índices de pobreza y menor acceso a servicios básicos del país (INEI, 2023).
+#### 1. Concentración Geográfica Desproporcionada
+
+El **22.2%** del presupuesto viable acumulado se concentra de forma exclusiva en el departamento de Lima (**S/. 967 mil millones**). En contraste, la región Selva (Loreto, Ucayali, Amazonas y Madre de Dios), que abarca más del 55% del territorio y sufre altas tasas de pobreza (INEI, 2023), solo recibe el **8.2%** de los fondos.
 
 | Zona | Monto Viable | % del Total |
 |------|-------------|-------------|
@@ -34,11 +36,9 @@ Esta disparidad es especialmente preocupante cuando se considera que los departa
 | Resto del país | S/. 3,028 mil millones | 69.6% |
 
 
-#### 2. Sesgo sectorial: infraestructura vial sobre sectores sociales
+#### 2. Desbalance de Prioridades Sectoriales
 
-> *"El sector Transportes y Comunicaciones concentra casi 3 de cada 10 soles de inversión pública, mientras Salud y Educación juntos no llegan al 3%."*
-
-El análisis sectorial revela una marcada preferencia por la infraestructura física sobre los servicios sociales:
+El sector Transportes y Comunicaciones absorbe el **29.5%** de la inversión total, postergando sectores sociales críticos como Salud (**1.4%**) y Educación (**1.3%**), lo que perpetúa brechas estructurales en zonas rurales.
 
 | Sector | Monto Viable | % del Total |
 |--------|-------------|-------------|
@@ -50,28 +50,15 @@ El análisis sectorial revela una marcada preferencia por la infraestructura fí
 | **Salud** | S/. 62 mil millones | **1.4%** |
 | **Educación** | S/. 56 mil millones | **1.3%** |
 
-Este patrón resulta crítico en un país donde el **57.6% de la población rural** no tiene acceso a seguro de salud (ENAHO 2022) y donde la tasa de conclusión de secundaria en zonas rurales es del 72%, frente al 91% en zonas urbanas (MINEDU 2023).
+
+#### 3. Desvío Presupuestal Sistemático (Adendas y Sobrecostos)
+
+Existe una subestimación sistemática en la formulación de proyectos. El costo actualizado real supera al monto viable original en **S/. 664 mil millones** (un desvío del 15.3% global), lo que sugiere deficiencias técnicas en los estudios de pre-inversión y extensiones de alcance injustificadas.
 
 
-#### 3. Desvío presupuestal sistemático: el costo real siempre supera lo planeado
+#### 4. Anomalías Históricas de Emergencia (Pico 2020) 
 
-> *"El costo actualizado de los proyectos supera el monto viable original en S/. 664 mil millones, lo que representa un desvío del 15.3% sobre el total."*
-
-El dataset permite comparar el **monto viable** (presupuesto aprobado al declarar viable el proyecto) con el **costo actualizado** (última estimación del costo real). La diferencia acumulada asciende a **S/. 663,790 millones**, lo que sugiere:
-
-- Subestimación sistemática de costos en la formulación de proyectos
-- Modificaciones de alcance durante la ejecución
-- Impacto de la inflación y variación de precios de materiales
-- Posibles deficiencias en los estudios de pre-inversión
-
-Los sectores con mayor desvío absoluto son **Transportes y Agricultura**, precisamente los de mayor volumen de inversión.
-
-
-#### 4. Pico atípico de 2020: ¿reactivación o concentración de emergencia?
-
-> *"En 2020, el monto de inversión registrado alcanzó S/. 754 mil millones, el cual fue el mayor pico histórico del período analizado."*
-
-El año 2020, marcado por la pandemia COVID-19, registró el mayor volumen de inversión pública de toda la serie histórica. INVESSTIGAR FUENTES O TEORIZAR SI FUE POR EMERGENCIA EQUITATIVAMENTE EN TODAS PARTES O SE CONCENTRÓ EN UN DEPARTAMENTO.
+Durante el año de la pandemia por COVID-19, se registró un pico histórico atípico de **S/. 754 mil millones** en registros, cuya eficiencia de distribución y destino geográfico requiere ser evaluada para descartar centralismo de emergencia.
 
 
 ### Preguntas que Responde este Dataset
