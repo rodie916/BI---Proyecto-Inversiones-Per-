@@ -1,0 +1,55 @@
+# ==========================================
+# Entornos virtuales y caché de Python
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.pytest_cache/
+
+# ==========================================
+# Archivos de Bases de Datos y Backups
+# ==========================================
+*.bak
+*.mdf
+*.ldf
+*.ndf
+
+# ==========================================
+# Datasets y Archivos de Datos (Evita subir los 25 Excels)
+# ==========================================
+*.xlsx
+*.xls
+*.csv
+*.parquet
+*.json
+# Opcional: Ignorar carpetas enteras de datos si las tienen estructuradas así
+# data/raw/
+# data/processed/
+
+# ==========================================
+# Variables de Entorno y Seguridad
+# ==========================================
+.env
+*.env
+.env.local
+
+# ==========================================
+# Archivos del Sistema Operativo
+# ==========================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==========================================
+# Configuraciones de IDEs (VS Code, Jupyter, etc.)
+# ==========================================
+.vscode/
+.idea/
+.ipynb_checkpoints/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
