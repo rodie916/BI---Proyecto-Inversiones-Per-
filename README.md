@@ -41,7 +41,7 @@ El proceso ETL es el puente entre los sistemas fuente y el Data Mart. En este pr
 * **Modelado Dimensional (Star Schema)**: Se optó por una arquitectura en estrella debido a su alto rendimiento en consultas de agregación y su intuitiva navegación para los usuarios de negocio. El modelo separa claramente las métricas cuantitativas (hechos) de los atributos cualitativos (dimensiones).
 * **Métricas Aditivas y Semi-aditivas**: El modelo gestiona medidas sumables a través de todas las dimensiones (como el monto_viable) y ratios calculados que permiten evaluar desviaciones presupuestales de forma porcentual sin distorsionar la agregación.
 
-
+## Problematica
 ### Descripción de la Empresa (Entidad) y Problemática
 
 El análisis no se centra en una corporación privada, sino en el **Estado Peruano**, específicamente en el **Sistema Nacional de Programación Multianual y Gestión de Inversiones (Invierte.pe)**, administrado por el *Ministerio de Economía y Finanzas (MEF)*. Esta entidad orienta los recursos públicos destinados a la inversión para el cierre de brechas de infraestructura y acceso a servicios públicos esenciales.
