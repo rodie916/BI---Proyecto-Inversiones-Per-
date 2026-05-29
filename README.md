@@ -1,7 +1,7 @@
 # Inversión Pública en el Perú — Business Intelligence
 
 **Curso:** Business Intelligence · Universidad del Pacífico  
-**Integrantes:** Sebastian G., Fiorella, Marietha, Rodrigo y Diego  
+**Integrantes:** Sebastian Guevara Peralta, Fiorella Tamariz Pantoja, Marietha Córdova Delgado, Rodrigo Fernandez Yucra y Diego Medina Manrique  
 **Ciclo:** 2026-I  
 **Dataset:** [Public Investments in Peru — datos.gob.pe / Kaggle](https://www.kaggle.com/datasets/jenifergrategarro/dataset-public-investments-in-peru)  
 **Período analizado:** 2001 – 2024 · 25 departamentos · 468,428 proyectos
@@ -39,7 +39,7 @@ El proceso ETL es el puente entre los sistemas fuente y el Data Mart. En este pr
 
 #### Conceptos Clave Aplicados
 * **OLAP vs. OLTP**: Los sistemas fuente de Invierte.pe operan bajo un esquema transaccional (OLTP), optimizado para el registro individual de proyectos. Este proyecto migra dicha información a un entorno analítico (OLAP), diseñado para consultas complejas, agregaciones históricas y análisis de tendencias multidimensionales.
-* **Proceso ETL (Extract, Transform, Load)**: Implementado mediante scripts de Python (etl/unir_inversiones.py), el proceso consolida 25 fuentes regionales independientes, estandariza tipos de datos, maneja valores nulos y limpia anomalías estructurales para garantizar la "versión única de la verdad".
+* **Proceso ETL (Extract, Transform, Load)**: Implementado mediante scripts de Python `unir_inversiones.py`, el proceso consolida 25 fuentes regionales independientes, estandariza tipos de datos, maneja valores nulos y limpia anomalías estructurales para garantizar la "versión única de la verdad".
 * **Modelado Dimensional (Star Schema)**: Se optó por una arquitectura en estrella debido a su alto rendimiento en consultas de agregación y su intuitiva navegación para los usuarios de negocio. El modelo separa claramente las métricas cuantitativas (hechos) de los atributos cualitativos (dimensiones).
 * **Métricas Aditivas y Semi-aditivas**: El modelo gestiona medidas sumables a través de todas las dimensiones (como el monto_viable) y ratios calculados que permiten evaluar desviaciones presupuestales de forma porcentual sin distorsionar la agregación.
 
@@ -103,7 +103,7 @@ El análisis exploratorio del dataset revela tres patrones que justifican este e
 **Registros:** 468,428 proyectos de inversión pública  
 **Formato original:** 25 archivos Excel (.xlsx), uno por departamento  
 
-El dataset fue consolidado en un único archivo mediante un script Python (`etl/unir_inversiones.py`) que unifica los 25 archivos manteniendo la integridad de los datos.
+El dataset fue consolidado en un único archivo mediante un script Python (`unir_inversiones.py`) que unifica los 25 archivos manteniendo la integridad de los datos.
 
 ## 3. Modelado Dimensional
 
@@ -117,7 +117,7 @@ La dimensión tiempo se implementó como **calendario genérico** (2000–2030) 
 
 ### Diagrama del modelo
 
-![Star Schema — Datamart_Inversiones_Peru](./assets/diagrama_star_schema.png)
+![Star Schema — Datamart_Inversiones_Peru](DataMart%20Estrella%20Inverisones%20Perú.jpeg)
 
 ### Descripción de tablas
 
@@ -202,17 +202,11 @@ El dashboard está estructurado en 5 pestañas con narrativa progresiva:
 📦 BI---Proyecto-Inversiones-Per-/
 ├── 📄 README.md
 ├── 📄 diccionario_de_datos.md
-├── 📂 sql/
-│   ├── Datamart_Inversiones_Peru.sql      ← Creación del Data Mart
-│   ├── poblar_dimensiones.sql             ← INSERT dimensiones
-│   └── poblar_fact_BULK_v2.sql            ← BULK INSERT Fact Table
-├── 📂 etl/
-│   ├── unir_inversiones.py                ← Consolidación 25 excels
-│   └── poblar_datamart_v3.py              ← ETL Python → SQL Server
-├── 📂 assets/
-│   └── diagrama_star_schema.png           ← Imagen del modelo
-└── 📂 dataset/
-    └── Inversiones_Peru_Consolidado.xlsx  ← Dataset consolidado
+├── 📄 Datamart_Inversiones_Peru_v2.sql      ← Creación del Data Mart
+├── 📄 poblar_dimensiones_v2.sql             ← INSERT dimensiones
+├── 📄 poblar_datamart_v4.py                 ← ETL Python → SQL Server
+├── 🖼️ DataMart Estrella Inverisones Perú.jpeg ← Imagen del modelo
+└── 📄 .gitignore                            ← Archivos excluidos del control de versiones
 ```
 
 ## Cómo reproducir el proyecto
@@ -225,14 +219,14 @@ git clone https://github.com/rodie916/BI---Proyecto-Inversiones-Per-.git
 pip install pandas openpyxl pyodbc
 
 # 3. Crear estructura del Data Mart en SSMS
-# → Ejecutar sql/Datamart_Inversiones_Peru.sql
+# → Ejecutar Datamart_Inversiones_Peru_v2.sql
 
 # 4. Poblar dimensiones en SSMS
-# → Ejecutar sql/poblar_dimensiones.sql
+# → Ejecutar poblar_dimensiones_v2.sql
 
 # 5. Poblar Fact Table vía Python
-# → Editar RUTA_EXCEL y SERVER en etl/poblar_datamart_v3.py
-python etl/poblar_datamart_v3.py
+# → Editar RUTA_EXCEL y SERVER en poblar_datamart_v4.py
+python poblar_datamart_v4.py
 ```
 
 ---
