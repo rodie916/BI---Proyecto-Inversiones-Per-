@@ -8,7 +8,34 @@
 
 ### Marco Teórico
 
-El desarrollo de este proyecto se fundamenta en los principios de **Business Intelligence (BI)** y el modelado de datos propuesto por la metodología de **Ralph Kimball (Lifecycle Toolkit)**. El objetivo primordial es transformar datos transaccionales gubernamentales de naturaleza heterogénea en activos de información estratégica para la toma de decisiones y el control ciudadano.
+### Business Intelligence
+
+El Business Intelligence (BI) es un conjunto de metodologías, procesos y tecnologías que permiten transformar datos en bruto en información útil para la toma de decisiones. A diferencia de los sistemas transaccionales, cuyo objetivo es registrar operaciones, los sistemas de BI están orientados al análisis: buscan responder preguntas del tipo "¿qué pasó?", "¿por qué pasó?" y "¿qué podría pasar?".
+
+En la práctica, un proyecto de BI implica tres grandes etapas: la **extracción, transformación y carga de datos** (ETL), el **modelado dimensional** de la información, y la **visualización** a través de tableros de control o dashboards.
+
+### Data Mart y Modelado Dimensional
+
+Un **Data Mart** es una base de datos especializada que concentra información de un área o proceso específico de una organización. A diferencia de un Data Warehouse —que abarca toda la empresa— el Data Mart se enfoca en responder preguntas concretas de un dominio acotado.
+
+El modelo más utilizado para estructurar un Data Mart es el **Star Schema** (esquema estrella), propuesto por Ralph Kimball. Este modelo organiza la información en torno a una **tabla de hechos** (que contiene las métricas numéricas a analizar) rodeada de **tablas dimensionales** (que proveen el contexto descriptivo). La principal ventaja de este enfoque es su eficiencia para consultas analíticas: al reducir los JOINs necesarios, permite procesar grandes volúmenes de datos con tiempos de respuesta bajos.
+
+### ETL (Extract, Transform, Load)
+
+El proceso ETL es el puente entre los sistemas fuente y el Data Mart. En este proyecto se implementó mediante:
+
+- **Extracción:** lectura de 25 archivos Excel regionales provenientes del portal datos.gob.pe
+- **Transformación:** consolidación, limpieza de nulos, normalización de texto y generación de claves surrogate mediante Python (pandas)
+- **Carga:** inserción en SQL Server a través de scripts T-SQL y conexión directa vía pyodbc
+
+### Herramientas utilizadas
+
+| Herramienta | Uso en el proyecto |
+|-------------|-------------------|
+| Python (pandas, openpyxl, pyodbc) | ETL y consolidación del dataset |
+| SQL Server + SSMS | Creación y gestión del Data Mart |
+| Power BI Desktop | Visualización y dashboards |
+| GitHub | Control de versiones y documentación |
 
 #### Conceptos Clave Aplicados
 * **OLAP vs. OLTP**: Los sistemas fuente de Invierte.pe operan bajo un esquema transaccional (OLTP), optimizado para el registro individual de proyectos. Este proyecto migra dicha información a un entorno analítico (OLAP), diseñado para consultas complejas, agregaciones históricas y análisis de tendencias multidimensionales.
