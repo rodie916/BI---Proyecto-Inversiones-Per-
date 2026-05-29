@@ -82,25 +82,80 @@ Con el Data Mart construido, este proyecto responde las siguientes preguntas de 
 
 El dataset fue consolidado en un único archivo mediante un script Python (`etl/unir_inversiones.py`) que unifica los 25 archivos manteniendo la integridad de los datos.
 
-## Arquitectura del Data Mart
+### Decisiones de diseño
 
-El proyecto implementa un **modelo dimensional tipo Star Schema** en SQL Server:
+Se eligió un **Star Schema** por tres razones: el dataset tiene una estructura analítica natural (una transacción central —el proyecto— rodeada de atributos descriptivos), el volumen de datos (468K filas) requiere consultas eficientes, y Power BI trabaja de forma óptima con este modelo.
 
-```
-         Dim_Tiempo
-              |
-Dim_Sector ──┤
-              ├── Fact_Inversiones ──── Dim_Ubicacion
-Dim_Entidad ──┤
-              |
-         Dim_Estado
-```
+La tabla de hechos registra una fila por proyecto de inversión. Las métricas principales son el monto viable, el costo actualizado y los beneficiarios. Se incluyó una columna calculada (`variacion_costo`) para medir el desvío presupuestal directamente en la base de datos.
 
-**Fact Table:** `Fact_Inversiones` — 468,428 filas  
-**Métricas:** monto_viable, costo_actualizado, beneficiarios, variacion_costo (calculada)  
-**Dimensiones:** 5 tablas dimensionales + calendario Dim_Tiempo (2000–2030)
+La dimensión tiempo se implementó como **calendario genérico** (2000–2030) con una clave en formato YYYYMMDD, y la tabla de hechos la referencia **dos veces**: una para la fecha de registro y otra para la fecha de viabilidad, permitiendo analizar el tiempo transcurrido entre ambos eventos.
 
-Ver el **[Diccionario de Datos](./diccionario_de_datos.md)** para la descripción completa de cada tabla y columna.
+### Diagrama del modelo
+
+![Star Schema — Datamart_Inversiones_Peru](./assets/diagrama_star_schema.png)
+
+### Descripción de tablas
+
+**Fact_Inversiones** — tabla central, 468,428 filas
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_hecho | INT PK | Clave surrogate |
+| codigo_inversion | BIGINT | Código en Invierte.pe |
+| nombre_inversion | NVARCHAR(500) | Nombre oficial del proyecto |
+| id_tiempo_registro | INT FK | Fecha de ingreso al sistema |
+| id_tiempo_viabilidad | INT FK | Fecha de declaratoria de viabilidad (nullable) |
+| id_ubicacion | INT FK | Referencia geográfica |
+| id_sector | INT FK | Sector del gobierno |
+| id_entidad | INT FK | Entidad y ejecutora |
+| id_estado | INT FK | Estado del proyecto |
+| monto_viable | DECIMAL(20,2) | Presupuesto aprobado en S/. |
+| costo_actualizado | DECIMAL(20,2) | Costo actualizado en S/. |
+| beneficiarios | INT | Personas beneficiadas (nullable) |
+| variacion_costo | Calculada | costo_actualizado - monto_viable |
+
+**Dim_Tiempo** — 11,323 filas (calendario 2000–2030)
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_tiempo | INT PK | Formato YYYYMMDD |
+| fecha | DATE | Fecha completa |
+| anio | INT | Año |
+| trimestre | INT | Trimestre (1–4) |
+| mes | INT | Mes (1–12) |
+| nombre_mes | VARCHAR(20) | Nombre del mes |
+| semana | INT | Semana del año |
+| dia | INT | Día del mes |
+| nombre_dia | VARCHAR(20) | Nombre del día |
+| es_fin_semana | BIT | 1 = sábado o domingo |
+
+**Dim_Ubicacion** — 2,174 filas
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_ubicacion | INT PK | Clave surrogate |
+| ubigeo | VARCHAR(10) | Código INEI |
+| departamento | VARCHAR(100) | Departamento (25 valores) |
+| provincia | VARCHAR(100) | Provincia (197 valores) |
+| distrito | VARCHAR(100) | Distrito (1,738 valores) |
+
+**Dim_Sector** — 34 filas  
+**Dim_Entidad** — 9,923 filas (entidad + ejecutora)  
+**Dim_Estado** — 2 filas (ACTIVO / CERRADO)
+
+El diccionario de datos completo se encuentra en [`diccionario_de_datos.md`](./diccionario_de_datos.md).
+
+## 4. Diseño y Análisis de Resultados (Power BI)
+
+*Esta sección se completará en la entrega final con capturas del dashboard y análisis de cada visualización.*
+
+El dashboard está estructurado en 5 pestañas con narrativa progresiva:
+
+- **Visión General** — KPIs principales, mapa coroplético, estado de proyectos
+- **Evolución temporal** — serie 2001–2024 por región natural (Costa / Sierra / Selva)
+- **Brecha regional** — distribución geográfica, inversión per cápita por departamento
+- **Desvío presupuestal** — matriz sectorial, top proyectos con mayor desvío
+- **Beneficiarios** — impacto social por sector y región
 
 
 ##  Equipo
