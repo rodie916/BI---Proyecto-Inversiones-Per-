@@ -1,10 +1,12 @@
 # Inversión Pública en el Perú — Business Intelligence
 
-> **Curso:** Business Intelligence · Universidad del Pacífico  
-> **Dataset:** Public Investments in Peru — Portal de Datos Abiertos del Estado Peruano  
-> **Período:** 2001 – 2024 · 25 departamentos · 468,428 proyectos
+**Curso:** Business Intelligence · Universidad del Pacífico  
+**Integrantes:** Sebastian G., Fiorella, Marietha, Rodrigo y Diego  
+**Ciclo:** 2026-I  
+**Dataset:** [Public Investments in Peru — datos.gob.pe / Kaggle](https://www.kaggle.com/datasets/jenifergrategarro/dataset-public-investments-in-peru)  
+**Período analizado:** 2001 – 2024 · 25 departamentos · 468,428 proyectos
 
-## Marco Teórico
+## 1. Marco Teórico
 
 ### Business Intelligence
 
@@ -41,18 +43,18 @@ El proceso ETL es el puente entre los sistemas fuente y el Data Mart. En este pr
 * **Modelado Dimensional (Star Schema)**: Se optó por una arquitectura en estrella debido a su alto rendimiento en consultas de agregación y su intuitiva navegación para los usuarios de negocio. El modelo separa claramente las métricas cuantitativas (hechos) de los atributos cualitativos (dimensiones).
 * **Métricas Aditivas y Semi-aditivas**: El modelo gestiona medidas sumables a través de todas las dimensiones (como el monto_viable) y ratios calculados que permiten evaluar desviaciones presupuestales de forma porcentual sin distorsionar la agregación.
 
-## Problematica
-### Descripción de la Empresa (Entidad) y Problemática
+## 2. Descripción de la institución y problematica
+### El sistema de inversión pública en el Perú
 
-El análisis no se centra en una corporación privada, sino en el **Estado Peruano**, específicamente en el **Sistema Nacional de Programación Multianual y Gestión de Inversiones (Invierte.pe)**, administrado por el *Ministerio de Economía y Finanzas (MEF)*. Esta entidad orienta los recursos públicos destinados a la inversión para el cierre de brechas de infraestructura y acceso a servicios públicos esenciales.
+El Ministerio de Economía y Finanzas (MEF) del Perú gestiona la inversión pública a través del sistema **Invierte.pe**, implementado en 2017 como sucesor del SNIP. Este sistema establece un ciclo de vida para cada proyecto: formulación, evaluación, aprobación de viabilidad, ejecución y cierre. Cada proyecto recibe un código único y queda registrado con información sobre su sector, entidad responsable, ubicación geográfica, presupuesto aprobado y número de beneficiarios.
 
-#### La Problemática Encontrada
+Entre 2001 y 2024, el Estado peruano registró **468,428 proyectos de inversión pública** por un monto viable acumulado de **S/. 4.35 billones**, distribuidos en los 25 departamentos del país.
 
-A pesar de contar con un flujo continuo de miles de millones de soles anuales, la gestión de la inversión pública sufre de ineficiencias estructurales que se evidencian al analizar los **468,428 proyectos registrados entre 2001 y 2024:**
+#### Problemática Encontrada
 
-#### 1. Concentración Geográfica Desproporcionada
+El análisis exploratorio del dataset revela tres patrones que justifican este estudio:
 
-El **22.2%** del presupuesto viable acumulado se concentra de forma exclusiva en el departamento de Lima (**S/. 967 mil millones**). En contraste, la región Selva (Loreto, Ucayali, Amazonas y Madre de Dios), que abarca más del 55% del territorio y sufre altas tasas de pobreza (INEI, 2023), solo recibe el **8.2%** de los fondos.
+**Concentración Geográfica.** El 22.2% del presupuesto viable acumulado se concentra de forma exclusiva en el departamento de Lima (**S/. 967 mil millones**). En contraste, la región Selva (Loreto, Ucayali, Amazonas y Madre de Dios), que abarca más del 55% del territorio y sufre altas tasas de pobreza (INEI, 2023), solo recibe el **8.2%** de los fondos.
 
 | Zona | Monto Viable | % del Total |
 |------|-------------|-------------|
@@ -61,9 +63,7 @@ El **22.2%** del presupuesto viable acumulado se concentra de forma exclusiva en
 | Resto del país | S/. 3,028 mil millones | 69.6% |
 
 
-#### 2. Desbalance de Prioridades Sectoriales
-
-El sector Transportes y Comunicaciones absorbe el **29.5%** de la inversión total, postergando sectores sociales críticos como Salud (**1.4%**) y Educación (**1.3%**), lo que perpetúa brechas estructurales en zonas rurales.
+**Sesgo sectorial.** El sector Transportes y Comunicaciones concentra el 29.5% del monto total (S/. 1,284 miles de millones), mientras que Salud y Educación juntos no alcanzan el 3% (S/. 62 y S/. 56 miles de millones respectivamente). Esto ocurre en un contexto donde el 57.6% de la población rural carece de seguro de salud (ENAHO, 2022) y la tasa de conclusión de secundaria en zonas rurales es 19 puntos porcentual menor que en zonas urbanas (MINEDU, 2023).
 
 | Sector | Monto Viable | % del Total |
 |--------|-------------|-------------|
@@ -76,25 +76,23 @@ El sector Transportes y Comunicaciones absorbe el **29.5%** de la inversión tot
 | **Educación** | S/. 56 mil millones | **1.3%** |
 
 
-#### 3. Desvío Presupuestal Sistemático (Adendas y Sobrecostos)
-
-Existe una subestimación sistemática en la formulación de proyectos. El costo actualizado real supera al monto viable original en **S/. 664 mil millones** (un desvío del 15.3% global), lo que sugiere deficiencias técnicas en los estudios de pre-inversión y extensiones de alcance injustificadas.
+**Desvío presupuestal sistemático.** El costo actualizado de los proyectos supera al monto viable original en S/. 663,790 millones, equivalente a un desvío del 15.3% sobre el total. Este patrón sugiere debilidades en la formulación de proyectos y en los estudios de pre-inversión.
 
 
-#### 4. Anomalías Históricas de Emergencia (Pico 2020) 
-
-Durante el año de la pandemia por COVID-19, se registró un pico histórico atípico de **S/. 754 mil millones** en registros, cuya eficiencia de distribución y destino geográfico requiere ser evaluada para descartar centralismo de emergencia.
+**Anomalías Históricas de Emergencia (Pico 2020)** Durante el año de la pandemia por COVID-19, se registró un pico histórico atípico de S/. 754 mil millones en registros, cuya eficiencia de distribución y destino geográfico requiere ser evaluada para descartar centralismo de emergencia.
 
 
-### Preguntas que Responde este Dataset
+### Pregunta central del proyecto
 
-Con el Data Mart construido, este proyecto responde las siguientes preguntas de negocio:
+> *¿La distribución de la inversión pública peruana entre 2001 y 2024 refleja las necesidades reales de la población, o reproduce y profundiza las brechas territoriales y sectoriales existentes?*
 
-1. ¿Qué departamentos reciben más inversión pública por habitante en sectores de salud y educación?
-2. ¿Ha mejorado la distribución geográfica de la inversión entre 2010 y 2024, o la brecha Lima-regiones se ha profundizado?
-3. ¿Qué sectores presentan mayor desvío entre el presupuesto viable y el costo actualizado?
-4. ¿Cuánto tiempo transcurre en promedio entre el registro y la declaración de viabilidad de un proyecto, y varía esto por sector o región?
-5. ¿Los departamentos con mayor índice de pobreza reciben inversión proporcionalmente mayor en sectores sociales?
+### Preguntas específicas que responde el Data Mart
+
+1. ¿Qué departamentos reciben más inversión en salud y educación por habitante?
+2. ¿La brecha Lima-regiones se ha reducido o ampliado entre 2010 y 2024?
+3. ¿Qué sectores presentan mayor desvío entre presupuesto viable y costo actualizado?
+4. ¿Los departamentos de la selva reciben inversión proporcionalmente mayor en servicios básicos?
+5. ¿Cuánto tiempo tarda en promedio un proyecto en obtener viabilidad, y varía esto por región?
 
 
 ## Sobre el Dataset
@@ -106,6 +104,8 @@ Con el Data Mart construido, este proyecto responde las siguientes preguntas de 
 **Formato original:** 25 archivos Excel (.xlsx), uno por departamento  
 
 El dataset fue consolidado en un único archivo mediante un script Python (`etl/unir_inversiones.py`) que unifica los 25 archivos manteniendo la integridad de los datos.
+
+## 3. Modelado Dimensional
 
 ### Decisiones de diseño
 
@@ -176,17 +176,66 @@ El diccionario de datos completo se encuentra en [`diccionario_de_datos.md`](./d
 
 El dashboard está estructurado en 5 pestañas con narrativa progresiva:
 
+*Esta sección se completará en la entrega final con capturas del dashboard y análisis de cada visualización.*
+
 - **Visión General** — KPIs principales, mapa coroplético, estado de proyectos
 - **Evolución temporal** — serie 2001–2024 por región natural (Costa / Sierra / Selva)
 - **Brecha regional** — distribución geográfica, inversión per cápita por departamento
 - **Desvío presupuestal** — matriz sectorial, top proyectos con mayor desvío
 - **Beneficiarios** — impacto social por sector y región
 
+## 5. Conclusiones
 
-##  Equipo
+*Se completarán en la entrega final una vez analizado el dashboard.*
 
-1. Córdova Delgado, Marietha Kristeen Alexandra
-2. Fernandez Yucra, Rodrigo Alejandro
-3. Guevara Peralta, Sebatian Antonio Valentino
-4. Medina Manrique, Diego Rodrigo
-5. Tamariz Pantoja, Fiorella Ariana
+---
+
+## 6. Recomendaciones
+
+*Se completarán en la entrega final.*
+
+---
+
+## Estructura del repositorio
+
+```
+📦 BI---Proyecto-Inversiones-Per-/
+├── 📄 README.md
+├── 📄 diccionario_de_datos.md
+├── 📂 sql/
+│   ├── Datamart_Inversiones_Peru.sql      ← Creación del Data Mart
+│   ├── poblar_dimensiones.sql             ← INSERT dimensiones
+│   └── poblar_fact_BULK_v2.sql            ← BULK INSERT Fact Table
+├── 📂 etl/
+│   ├── unir_inversiones.py                ← Consolidación 25 excels
+│   └── poblar_datamart_v3.py              ← ETL Python → SQL Server
+├── 📂 assets/
+│   └── diagrama_star_schema.png           ← Imagen del modelo
+└── 📂 dataset/
+    └── Inversiones_Peru_Consolidado.xlsx  ← Dataset consolidado
+```
+
+## Cómo reproducir el proyecto
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/rodie916/BI---Proyecto-Inversiones-Per-.git
+
+# 2. Instalar dependencias
+pip install pandas openpyxl pyodbc
+
+# 3. Crear estructura del Data Mart en SSMS
+# → Ejecutar sql/Datamart_Inversiones_Peru.sql
+
+# 4. Poblar dimensiones en SSMS
+# → Ejecutar sql/poblar_dimensiones.sql
+
+# 5. Poblar Fact Table vía Python
+# → Editar RUTA_EXCEL y SERVER en etl/poblar_datamart_v3.py
+python etl/poblar_datamart_v3.py
+```
+
+---
+
+*Fuente de datos: Portal de Datos Abiertos del Estado Peruano — datosabiertos.gob.pe · Sistema Invierte.pe — MEF*
+
