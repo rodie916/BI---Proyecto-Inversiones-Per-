@@ -4,9 +4,7 @@
 > **Dataset:** Public Investments in Peru — Portal de Datos Abiertos del Estado Peruano  
 > **Período:** 2001 – 2024 · 25 departamentos · 468,428 proyectos
 
-## Problemática
-
-### Marco Teórico
+## Marco Teórico
 
 ### Business Intelligence
 
