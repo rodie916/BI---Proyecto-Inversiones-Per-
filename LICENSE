@@ -1,0 +1,14 @@
+Licencia Académica de Uso Abierto (Basada en la Licencia MIT)
+
+Copyright (c) 2026 Córdova Delgado, Marietha; Fernandez Yucra, Rodrigo; Guevara Peralta, Sebatian; Medina Manrique, Diego; Tamariz Pantoja, Fiorella.
+
+El presente proyecto ha sido desarrollado con fines estrictamente académicos para el curso de Business Intelligence de la Universidad del Pacífico.
+
+Por la presente se concede permiso, de forma gratuita, a cualquier persona o institución que obtenga una copia de este proyecto académico, incluyendo el modelo dimensional, los scripts de procesamiento (ETL en Python), las consultas SQL y la documentación asociada (en adelante, el "Proyecto"), para utilizar el Proyecto sin restricciones. 
+
+Esto incluye, pero no se limita a, los derechos de estudiar, usar, copiar, modificar, fusionar, publicar, distribuir y/o compartir copias del Proyecto, sujeto a las siguientes condiciones:
+
+1. El aviso de derechos de autor (copyright) mencionado anteriormente, la mención a la Universidad del Pacífico y este aviso de permisos deberán incluirse en todas las copias o porciones sustanciales del Proyecto.
+2. Se reconoce que los datos originales utilizados para poblar el modelo provienen del Portal de Datos Abiertos del Estado Peruano (Invierte.pe / MEF), por lo que cualquier uso derivado de los mismos debe respetar los lineamientos de transparencia de dicha entidad.
+
+EL PROYECTO ACADÉMICO SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO, PERO NO LIMITADO A, LAS GARANTÍAS DE COMERCIABILIDAD, ADECUACIÓN PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN. EN NINGÚN CASO LOS AUTORES (ESTUDIANTES) NI LA UNIVERSIDAD SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑO U OTRA RESPONSABILIDAD, YA SEA EN UNA ACCIÓN DE CONTRATO, AGRAVIO O DE OTRO TIPO, QUE SURJA DE, O EN CONEXIÓN CON EL PROYECTO O EL USO U OTROS TRATOS EN EL MISMO.
