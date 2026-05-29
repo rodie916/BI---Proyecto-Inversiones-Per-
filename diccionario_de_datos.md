@@ -5,7 +5,9 @@
 
 ## 1. Dataset Fuente: `Inversiones_Peru_Consolidado.xlsx`
 
-Archivo consolidado a partir de 25 archivos Excel regionales. Cada fila representa un **proyecto de inversión pública** registrado en el sistema Invierte.pe del MEF.
+Archivo consolidado a partir de 25 archivos Excel regionales descargados del portal de datos abiertos del Estado peruano (datos.gob.pe). Cada fila representa un **proyecto de inversión pública** registrado en el sistema Invierte.pe del Ministerio de Economía y Finanzas (MEF).
+
+**Filas totales:** 468,428 · **Columnas:** 16 · **Período:** 2001–2024 · **Cobertura:** 25 departamentos
 
 | # | Campo | Tipo | Nulos | Valores únicos | Descripción |
 |---|-------|------|-------|----------------|-------------|
@@ -37,77 +39,80 @@ Archivo consolidado a partir de 25 archivos Excel regionales. Cada fila represen
 
 ## 2. Data Mart: `Datamart_Inversiones_Peru` (SQL Server)
 
-Modelo dimensional tipo **estrella** construido sobre el dataset fuente.
+Modelo dimensional tipo **Star Schema** con 8 dimensiones y 1 tabla de hechos.
 
 ---
 
 ### 2.1 Tabla de Hechos: `Fact_Inversiones`
 
-Tabla central del modelo dimensional. Cada fila representa un proyecto de inversión pública con sus métricas y claves foráneas a las dimensiones.
+**468,428 filas.** Una fila por proyecto de inversión registrado. Contiene las métricas numéricas y las claves foráneas a las 8 dimensiones.
 
 | Columna | Tipo SQL | Nulos | Descripción |
 |---------|----------|-------|-------------|
 | `id_hecho` | INT IDENTITY PK | No | Clave primaria surrogate, generada automáticamente. |
-| `codigo_inversion` | BIGINT | No | Código único del proyecto en Invierte.pe (puede repetirse en proyectos multiregionales). |
+| `codigo_inversion` | BIGINT | No | Código del proyecto en Invierte.pe (puede repetirse en proyectos multiregionales). |
 | `nombre_inversion` | NVARCHAR(500) | No | Nombre oficial del proyecto (máximo 490 caracteres). |
-| `id_tiempo_registro` | INT FK | No | Referencia a `Dim_Tiempo` — fecha de ingreso al sistema. Formato YYYYMMDD. |
-| `id_tiempo_viabilidad` | INT FK | Sí | Referencia a `Dim_Tiempo` — fecha de declaratoria de viabilidad. NULL si no tiene. |
-| `id_ubicacion` | INT FK | No | Referencia a `Dim_Ubicacion` — departamento, provincia y distrito. |
-| `id_sector` | INT FK | No | Referencia a `Dim_Sector` — sector del gobierno responsable. |
-| `id_entidad` | INT FK | No | Referencia a `Dim_Entidad` — entidad y unidad ejecutora. |
-| `id_estado` | INT FK | No | Referencia a `Dim_Estado` — estado activo o cerrado. |
+| `id_tiempo_registro` | INT FK | No | → `Dim_Tiempo`: fecha de ingreso al sistema. |
+| `id_tiempo_viabilidad` | INT FK | Sí | → `Dim_Tiempo`: fecha de viabilidad. NULL si el proyecto aún no tiene viabilidad. |
+| `id_ubicacion` | INT FK | No | → `Dim_Ubicacion`: departamento, provincia y distrito. |
+| `id_sector` | INT FK | No | → `Dim_Sector`: sector del gobierno responsable. |
+| `id_entidad` | INT FK | No | → `Dim_Entidad`: entidad y unidad ejecutora. |
+| `id_estado` | INT FK | No | → `Dim_Estado`: estado activo o cerrado. |
+| `id_nivel_gobierno` | INT FK | No | → `Dim_NivelGobierno`: nivel de gobierno que ejecuta. |
+| `id_tipo_intervencion` | INT FK | No | → `Dim_TipoIntervencion`: tipo de obra o intervención. |
+| `id_rango_monto` | INT FK | No | → `Dim_RangoMonto`: clasificación del proyecto por tamaño presupuestal. |
 | `monto_viable` | DECIMAL(20,2) | No | Presupuesto aprobado en viabilidad, en soles. |
 | `costo_actualizado` | DECIMAL(20,2) | No | Costo actualizado del proyecto, en soles. |
 | `beneficiarios` | INT | Sí | Número de beneficiarios directos. NULL cuando no fue registrado. |
-| `variacion_costo` | Calculada | — | Columna computada: `costo_actualizado - monto_viable`. Positivo = sobrecosto. |
+| `variacion_costo` | Columna calculada | — | `costo_actualizado - monto_viable`. Positivo = sobrecosto respecto al presupuesto viable. |
 
 ---
 
-### 2.2 Dimensión: `Dim_Tiempo`
+### 2.2 Dim_Tiempo
 
-Calendario genérico que cubre del 01/01/2000 al 31/12/2030 (11,323 filas). Referenciada **dos veces** por la Fact Table.
+Calendario genérico del 01/01/2000 al 31/12/2030. **11,323 filas.** Referenciada **dos veces** por la Fact Table: una para fecha de registro y otra para fecha de viabilidad.
 
 | Columna | Tipo SQL | Descripción |
 |---------|----------|-------------|
-| `id_tiempo` | INT PK | Clave en formato YYYYMMDD (ej: 20150301). Permite joins directos con fechas. |
+| `id_tiempo` | INT PK | Clave en formato YYYYMMDD (ej: 20200315). Permite joins directos con fechas. |
 | `fecha` | DATE | Fecha completa. |
 | `anio` | INT | Año (2000–2030). |
 | `trimestre` | INT | Trimestre del año (1 a 4). |
 | `mes` | INT | Mes del año (1 a 12). |
-| `nombre_mes` | VARCHAR(20) | Nombre del mes en español (Enero, Febrero…). |
+| `nombre_mes` | VARCHAR(20) | Nombre del mes (Enero, Febrero…). |
 | `semana` | INT | Semana del año (1 a 53). |
 | `dia` | INT | Día del mes (1 a 31). |
-| `nombre_dia` | VARCHAR(20) | Nombre del día en español (Lunes, Martes…). |
+| `nombre_dia` | VARCHAR(20) | Nombre del día (Lunes, Martes…). |
 | `es_fin_semana` | BIT | 1 = sábado o domingo, 0 = día hábil. |
 
 ---
 
-### 2.3 Dimensión: `Dim_Ubicacion`
+### 2.3 Dim_Ubicacion
 
-Jerarquía geográfica completa del Perú. **2,174 filas** (combinaciones únicas departamento-provincia-distrito).
+Jerarquía geográfica completa del Perú. **2,174 filas.**
 
 | Columna | Tipo SQL | Descripción |
 |---------|----------|-------------|
 | `id_ubicacion` | INT IDENTITY PK | Clave surrogate. |
-| `ubigeo` | VARCHAR(10) | Código INEI de ubicación geográfica. Permite cruzar con otros datasets oficiales. |
+| `ubigeo` | VARCHAR(10) | Código INEI de ubicación. Permite cruzar con otros datasets oficiales. |
 | `departamento` | VARCHAR(100) | Nombre del departamento (25 valores únicos). |
 | `provincia` | VARCHAR(100) | Nombre de la provincia (197 valores únicos). `SIN PROVINCIA` cuando no fue registrado. |
 | `distrito` | VARCHAR(100) | Nombre del distrito (1,738 valores únicos). `SIN DISTRITO` cuando no fue registrado. |
 
 ---
 
-### 2.4 Dimensión: `Dim_Sector`
+### 2.4 Dim_Sector
 
 Sectores del gobierno nacional. **34 filas.**
 
 | Columna | Tipo SQL | Descripción |
 |---------|----------|-------------|
 | `id_sector` | INT IDENTITY PK | Clave surrogate. |
-| `nombre_sector` | VARCHAR(100) | Nombre oficial del sector (ej: `TRANSPORTES Y COMUNICACIONES`, `SALUD`, `EDUCACION`). |
+| `nombre_sector` | VARCHAR(100) | Nombre oficial del sector. Ejemplos: `TRANSPORTES Y COMUNICACIONES`, `SALUD`, `EDUCACION`, `AGRICULTURA Y RIEGO`, `ENERGIA Y MINAS`. |
 
 ---
 
-### 2.5 Dimensión: `Dim_Entidad`
+### 2.5 Dim_Entidad
 
 Entidades públicas y sus unidades ejecutoras. **9,923 filas.**
 
@@ -119,44 +124,113 @@ Entidades públicas y sus unidades ejecutoras. **9,923 filas.**
 
 ---
 
-### 2.6 Dimensión: `Dim_Estado`
+### 2.6 Dim_Estado
 
 Estado del proyecto. **2 filas** (tabla de dominio).
 
 | Columna | Tipo SQL | Descripción |
 |---------|----------|-------------|
-| `id_estado` | INT IDENTITY PK | 1 = ACTIVO, 2 = CERRADO |
+| `id_estado` | INT IDENTITY PK | 1 = ACTIVO, 2 = CERRADO. |
 | `estado` | VARCHAR(20) | `ACTIVO`: proyecto en formulación, evaluación o ejecución. `CERRADO`: proyecto concluido o desactivado. |
 
 ---
 
-### 2.7 Tabla de Auditoría: `Log_Fact_Inversiones`
+### 2.7 Dim_NivelGobierno
 
-Registrada automáticamente por el **trigger `trg_Auditoria_Fact`** ante cada INSERT o DELETE en `Fact_Inversiones`. No forma parte del modelo dimensional.
+Nivel de gobierno que ejecuta el proyecto, derivado de la columna `Entidad`. **4 filas.**
+
+| Columna | Tipo SQL | Descripción |
+|---------|----------|-------------|
+| `id_nivel_gobierno` | INT IDENTITY PK | Clave surrogate. |
+| `nivel_gobierno` | VARCHAR(50) | Nivel de gobierno: `GOBIERNO NACIONAL` (ministerios, organismos), `GOBIERNO REGIONAL` (gobiernos regionales y sus gerencias), `GOBIERNO LOCAL` (municipalidades), `OTROS`. |
+
+**Distribución en el dataset:**
+
+| Nivel | Proyectos | % |
+|-------|-----------|---|
+| Gobierno Local | 332,354 | 71.0% |
+| Gobierno Regional | 69,595 | 14.9% |
+| Gobierno Nacional | 51,131 | 10.9% |
+| Otros | 15,348 | 3.3% |
+
+---
+
+### 2.8 Dim_TipoIntervencion
+
+Tipo de intervención del proyecto, extraído de la primera palabra del nombre de la inversión. **16 filas.**
+
+| Columna | Tipo SQL | Descripción |
+|---------|----------|-------------|
+| `id_tipo_intervencion` | INT IDENTITY PK | Clave surrogate. |
+| `tipo_intervencion` | VARCHAR(50) | Tipo de obra: `MEJORAMIENTO`, `CREACION`, `CONSTRUCCION`, `INSTALACION`, `ADQUISICION`, `AMPLIACION`, `FORTALECIMIENTO`, `REHABILITACION`, `RECUPERACION`, `MANTENIMIENTO`, `EQUIPAMIENTO`, `IMPLEMENTACION`, `ESTUDIOS`, `PROGRAMA`, `PROYECTO`, `OTROS`. |
+
+**Distribución en el dataset:**
+
+| Tipo | Proyectos |
+|------|-----------|
+| MEJORAMIENTO | 187,780 |
+| CREACION | 65,736 |
+| CONSTRUCCION | 45,090 |
+| INSTALACION | 26,772 |
+| ADQUISICION | 21,726 |
+| AMPLIACION | 20,460 |
+| OTROS | 77,588 |
+
+---
+
+### 2.9 Dim_RangoMonto
+
+Clasificación del proyecto según su tamaño presupuestal (monto viable). **4 filas.**
+
+| Columna | Tipo SQL | Descripción |
+|---------|----------|-------------|
+| `id_rango_monto` | INT IDENTITY PK | Clave surrogate. |
+| `rango_monto` | VARCHAR(30) | Clasificación: `PEQUEÑO (< 1M)`, `MEDIANO (1M - 10M)`, `GRANDE (10M - 100M)`, `MUY GRANDE (> 100M)`. |
+| `monto_min` | DECIMAL(20,2) | Límite inferior del rango en soles. |
+| `monto_max` | DECIMAL(20,2) | Límite superior del rango en soles. |
+
+**Distribución en el dataset:**
+
+| Rango | Proyectos | % |
+|-------|-----------|---|
+| Pequeño (< 1M) | 237,038 | 50.6% |
+| Mediano (1M - 10M) | 180,991 | 38.6% |
+| Grande (10M - 100M) | 43,945 | 9.4% |
+| Muy grande (> 100M) | 6,454 | 1.4% |
+
+---
+
+### 2.10 Tabla de Auditoría: `Log_Fact_Inversiones`
+
+Registrada automáticamente por el trigger `trg_Auditoria_Fact` ante cada INSERT o DELETE en `Fact_Inversiones`. No forma parte del modelo dimensional.
 
 | Columna | Tipo SQL | Descripción |
 |---------|----------|-------------|
 | `id_log` | INT IDENTITY PK | Clave del registro de auditoría. |
-| `accion` | VARCHAR(10) | Tipo de operación: `INSERT` o `DELETE`. |
+| `accion` | VARCHAR(10) | Operación: `INSERT` o `DELETE`. |
 | `id_hecho` | INT | ID del registro afectado en `Fact_Inversiones`. |
 | `codigo_inversion` | BIGINT | Código del proyecto afectado. |
-| `fecha_accion` | DATETIME | Fecha y hora exacta de la operación (automática, `GETDATE()`). |
-| `usuario` | VARCHAR(100) | Usuario de SQL Server que ejecutó la operación (automático, `SYSTEM_USER`). |
+| `fecha_accion` | DATETIME | Fecha y hora exacta (automática — `GETDATE()`). |
+| `usuario` | VARCHAR(100) | Usuario de SQL Server que ejecutó la operación (automático — `SYSTEM_USER`). |
 
 ---
 
 ## 3. Relaciones del Modelo
 
 ```
-Fact_Inversiones.id_tiempo_registro   → Dim_Tiempo.id_tiempo
-Fact_Inversiones.id_tiempo_viabilidad → Dim_Tiempo.id_tiempo
-Fact_Inversiones.id_ubicacion         → Dim_Ubicacion.id_ubicacion
-Fact_Inversiones.id_sector            → Dim_Sector.id_sector
-Fact_Inversiones.id_entidad           → Dim_Entidad.id_entidad
-Fact_Inversiones.id_estado            → Dim_Estado.id_estado
+Fact_Inversiones.id_tiempo_registro    → Dim_Tiempo.id_tiempo
+Fact_Inversiones.id_tiempo_viabilidad  → Dim_Tiempo.id_tiempo
+Fact_Inversiones.id_ubicacion          → Dim_Ubicacion.id_ubicacion
+Fact_Inversiones.id_sector             → Dim_Sector.id_sector
+Fact_Inversiones.id_entidad            → Dim_Entidad.id_entidad
+Fact_Inversiones.id_estado             → Dim_Estado.id_estado
+Fact_Inversiones.id_nivel_gobierno     → Dim_NivelGobierno.id_nivel_gobierno
+Fact_Inversiones.id_tipo_intervencion  → Dim_TipoIntervencion.id_tipo_intervencion
+Fact_Inversiones.id_rango_monto        → Dim_RangoMonto.id_rango_monto
 ```
 
 ---
 
-*Diccionario generado a partir del análisis de 468,428 registros del dataset fuente.*  
-*Última actualización: Mayo 2025*
+*Fuente: Portal de Datos Abiertos del Estado Peruano — datosabiertos.gob.pe · Sistema Invierte.pe — MEF*  
+*Dataset: Public Investments in Peru — Kaggle (Jenifer Grategarro)*  
+*Última actualización: Mayo 2026*
