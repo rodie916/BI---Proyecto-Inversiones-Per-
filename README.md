@@ -3,7 +3,7 @@
 **Curso:** Business Intelligence · Universidad del Pacífico  
 **Integrantes:** Sebastian Guevara Peralta, Fiorella Tamariz Pantoja, Marietha Córdova Delgado, Rodrigo Fernandez Yucra y Diego Medina Manrique  
 **Ciclo:** 2026-I  
-**Dataset:** [Public Investments in Peru — datos.gob.pe / Kaggle](https://www.kaggle.com/datasets/jenifergrategarro/dataset-public-investments-in-peru)  
+**Dataset:** [Public Investments in Peru — datos.gob.pe / Kaggle](https://www.kaggle.com/datasets/jenifergrategarro/dataset-public-investments-in-peru/data)  
 **Período analizado:** 2001 – 2024 · 25 departamentos · 468,428 proyectos
 
 ## 1. Marco Teórico
