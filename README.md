@@ -84,7 +84,7 @@ El análisis exploratorio del dataset revela tres patrones que justifican este e
 
 ### Pregunta central del proyecto
 
-> *¿La distribución de la inversión pública peruana entre 2001 y 2024 refleja las necesidades reales de la población, o reproduce y profundiza las brechas territoriales y sectoriales existentes?*
+> *¿La distribución de la inversión pública peruana entre 2001 y 2024 reproduce y profundiza las brechas territoriales y sectoriales existentes?*
 
 ### Preguntas específicas que responde el Data Mart
 
