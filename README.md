@@ -131,6 +131,7 @@ Se incorporaron dos dimensiones derivadas que no existen como columna directa en
 | id_estado | INT FK | Estado del proyecto |
 | id_nivel_gobierno | INT FK | Nivel de gobierno (derivado) |
 | id_tipo_intervencion | INT FK | Tipo de obra (derivado) |
+| id_inversion | INT PK | Inversión individual | 
 | monto_viable | DECIMAL(18,2) | Presupuesto aprobado en S/. |
 | costo_actualizado | DECIMAL(18,2) | Costo actualizado en S/. |
 | beneficiarios | INT | Personas beneficiadas (nulo → 0) |
