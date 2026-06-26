@@ -122,8 +122,6 @@ Se incorporaron dos dimensiones derivadas que no existen como columna directa en
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id_hecho | INT PK | Clave surrogate |
-| codigo_inversion | BIGINT | Código en Invierte.pe |
-| nombre_inversion | NVARCHAR(MAX) | Nombre oficial del proyecto |
 | id_tiempo_registro | INT FK | Fecha de ingreso al sistema |
 | id_tiempo_viabilidad | INT FK | Fecha de declaratoria de viabilidad (nullable) |
 | id_ubicacion | INT FK | Referencia geográfica |
@@ -197,6 +195,14 @@ Se incorporaron dos dimensiones derivadas que no existen como columna directa en
 |-------|------|-------------|
 | id_nivel_gobierno | INT PK | Clave surrogate |
 | nivel_gobierno | VARCHAR(50) | `GOBIERNO NACIONAL`, `GOBIERNO REGIONAL`, `GOBIERNO LOCAL` u `OTROS` |
+
+**Dim_Inversión** — 335,000 filas (representa a los proyectos de inversión)
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_inversion | INT PK | Clave surrogate | 
+| codigo_inversion | BIGINT | Código en Invierte.pe | 
+| nombre_inversion | NVARCHAR(MAX) | Nombre oficial del proyecto | 
  
 **Dim_TipoIntervencion** — 16 filas (derivada del nombre del proyecto)
  
