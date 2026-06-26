@@ -195,9 +195,6 @@ El análisis del Data Mart de inversión pública peruana (2001–2024) confirma
 - **La pandemia no resolvió la inequidad, posiblemente la usó como justificación para mantenerla.** El pico de S/. 754 mil millones registrado en 2020 amerita un análisis específico (pendiente de profundizar con el Dashboard) para determinar si la respuesta de emergencia reforzó o corrigió el patrón de concentración geográfica ya identificado.
 
 - **El modelo dimensional cumple su propósito analítico.** Separar `Dim_NivelGobierno` y `Dim_TipoIntervencion` como dimensiones derivadas —no presentes directamente en la fuente— permitió responder preguntas de negocio (¿quién ejecuta? ¿qué tipo de obra?) que el dataset original no facilitaba directamente, validando la utilidad del proceso de modelado por encima de un simple volcado de datos.
-
-> Las respuestas cuantitativas específicas a las 5 preguntas de investigación planteadas en la sección 2 (evolución de la brecha Lima-regiones 2010–2024, tiempos promedio de viabilidad por región, inversión per cápita en salud/educación por departamento) requieren cruces adicionales que se detallarán con las capturas del Dashboard en la entrega final — los hallazgos arriba corresponden a los patrones agregados ya validados sobre el dataset completo.
-
 ---
 
 ## 6. Recomendaciones
@@ -231,8 +228,6 @@ El análisis del Data Mart de inversión pública peruana (2001–2024) confirma
 ├── 📄 LICENSE
 └── 📄 .gitignore
 ```
-
-> Los archivos `poblacion_del_datamart.py` y `dash_proyecto_bi.py` (sin sufijo `_conexion`) corresponden a una versión intermedia de desarrollo; los archivos `_conexion` son la versión final validada.
 
 ## Cómo reproducir el proyecto
 
