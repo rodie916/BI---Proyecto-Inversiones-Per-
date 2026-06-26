@@ -203,7 +203,19 @@ Modelo dimensional tipo **Star Schema** con **7 dimensiones** y 1 tabla de hecho
 
 ---
 
-### 2.10 Tabla de Auditoría: `Log_Fact_Inversiones`
+### 2.10 Dim_Inversión
+
+**335 000 filas**. Representa a los proyectos de inversión.
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `id_inversion` | INT PK | Clave surrogate | 
+| `codigo_inversion` | BIGINT | Código en Invierte.pe | 
+| `nombre_inversion` | NVARCHAR(MAX) | Nombre oficial del proyecto | 
+
+---
+
+### 2.11 Tabla de Auditoría: `Log_Fact_Inversiones`
 
 **464,100 filas** (una por cada fila insertada en `Fact_Inversiones`). No forma parte del modelo dimensional.
 
