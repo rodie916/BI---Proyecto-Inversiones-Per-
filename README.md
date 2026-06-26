@@ -1,10 +1,11 @@
 # Inversión Pública en el Perú — Business Intelligence
+ 
+- **Curso:** Business Intelligence · Universidad del Pacífico
+- **Integrantes:** Sebastian Guevara Peralta, Fiorella Tamariz Pantoja, Marietha Córdova Delgado, Rodrigo Fernandez Yucra y Diego Medina Manrique
+- **Ciclo:** 2026-I
+- **Dataset:** [Public Investments in Peru — datos.gob.pe / Kaggle](https://www.kaggle.com/datasets/jenifergrategarro/dataset-public-investments-in-peru/data)
+- **Período analizado:** 2001 – 2024 · 25 departamentos · 468,428 proyectos fuente (464,100 cargados al Data Mart tras reglas de calidad de datos)
 
-**Curso:** Business Intelligence · Universidad del Pacífico
-**Integrantes:** Sebastian Guevara Peralta, Fiorella Tamariz Pantoja, Marietha Córdova Delgado, Rodrigo Fernandez Yucra y Diego Medina Manrique
-**Ciclo:** 2026-I
-**Dataset:** [Public Investments in Peru — datos.gob.pe / Kaggle](https://www.kaggle.com/datasets/jenifergrategarro/dataset-public-investments-in-peru/data)
-**Período analizado:** 2001 – 2024 · 25 departamentos · 468,428 proyectos fuente (464,100 cargados al Data Mart tras reglas de calidad de datos)
 
 ## 1. Marco Teórico
 
@@ -163,12 +164,57 @@ Se incorporaron dos dimensiones derivadas que no existen como columna directa en
 | distrito | VARCHAR(100) | Distrito (1,738 valores), `"NO ESPECIFICADO"` si falta |
 
 **Dim_Sector** — 34 filas
-**Dim_Entidad** — 2,010 filas (solo el nombre de la entidad)
-**Dim_Ejecutora** — 2,689 filas (unidad ejecutora, FK nullable en el Fact)
-**Dim_Estado** — 2 filas (ACTIVO / CERRADO)
-**Dim_NivelGobierno** — 4 filas (derivada de Entidad)
+ 
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_sector | INT PK | Clave surrogate |
+| nombre_sector | VARCHAR(150) | Nombre oficial del sector (ej. `TRANSPORTES Y COMUNICACIONES`, `SALUD`, `EDUCACION`) |
+ 
+**Dim_Entidad** — 2,010 filas
+ 
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_entidad | INT PK | Clave surrogate |
+| nombre_entidad | VARCHAR(250) | Nombre de la entidad pública responsable (ministerio, gobierno regional o local) |
+ 
+**Dim_Ejecutora** — 2,689 filas
+ 
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_ejecutora | INT PK | Clave surrogate |
+| nombre_ejecutora | VARCHAR(250) | Unidad ejecutora del presupuesto. FK nullable en el Fact: nulo cuando la entidad ejecuta directamente |
+ 
+**Dim_Estado** — 2 filas
+ 
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_estado | INT PK | Clave surrogate |
+| estado | VARCHAR(20) | `ACTIVO` (en formulación/evaluación/ejecución) o `CERRADO` (concluido o desactivado) |
+ 
+**Dim_NivelGobierno** — 4 filas (derivada de `Entidad`)
+ 
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_nivel_gobierno | INT PK | Clave surrogate |
+| nivel_gobierno | VARCHAR(50) | `GOBIERNO NACIONAL`, `GOBIERNO REGIONAL`, `GOBIERNO LOCAL` u `OTROS` |
+ 
 **Dim_TipoIntervencion** — 16 filas (derivada del nombre del proyecto)
-**Log_Fact_Inversiones** — tabla de auditoría del ETL, se llena automáticamente en cada ejecución del script de población
+ 
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_tipo_intervencion | INT PK | Clave surrogate |
+| tipo_intervencion | VARCHAR(50) | Tipo de obra (`MEJORAMIENTO`, `CREACION`, `CONSTRUCCION`, `INSTALACION`, `ADQUISICION`, `AMPLIACION`, `FORTALECIMIENTO`, `REHABILITACION`, `RECUPERACION`, `MANTENIMIENTO`, `EQUIPAMIENTO`, `IMPLEMENTACION`, `ESTUDIOS`, `PROGRAMA`, `PROYECTO`, `OTROS`) |
+ 
+**Log_Fact_Inversiones** — 464,100 filas (tabla de auditoría del ETL, no forma parte del modelo dimensional)
+ 
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id_log | INT PK | Clave surrogate del registro de auditoría |
+| accion | VARCHAR(20) | Siempre `INSERT` en la implementación actual |
+| id_hecho | INT | ID del registro afectado en `Fact_Inversiones` |
+| codigo_inversion | BIGINT | Código del proyecto afectado |
+| fecha_accion | DATETIME | Fecha y hora de ejecución del ETL |
+| usuario | VARCHAR(100) | Usuario del sistema operativo que ejecutó el script |
 
 El diccionario de datos completo se encuentra en [`diccionario_de_datos.md`](./diccionario_de_datos.md).
 
